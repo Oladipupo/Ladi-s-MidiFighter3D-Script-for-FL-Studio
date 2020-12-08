@@ -44,15 +44,18 @@ class MidiControllerConfig():
 
 
         self.Move = self.Cset + (self.shift)
-        self._play_key = [22 + self.Move,28 + self.Move,34 + self.Move,40 + self.Move]
-        self._stop_key = [21 + self.Move,27 + self.Move,33 + self.Move,39 + self.Move]
+        self._shiftUp12_key = [22 + self.Move,28 + self.Move,34 + self.Move,40 + self.Move]
+        self._shiftDown12_key = [21 + self.Move,27 + self.Move,33 + self.Move,39 + self.Move]
         self._record_key = [20 + self.Move, 26 + self.Move, 32 + self.Move, 38 + self.Move]
         self._shiftUp_key = [25 + self.Move,31 + self.Move,37 + self.Move,43 + self.Move]
         self._shiftDown_key = [24 + self.Move,30 + self.Move,36 + self.Move,42 + self.Move]
 
         
         event.data1 += self.Move
-        
+
+        if event.note < self.root:
+            event.handled = True
+
         if event.midiId == 0x90 and event.data1 == 0 + self.Move:
             self.page = 0
             event.handled = True
@@ -77,21 +80,26 @@ class MidiControllerConfig():
             self.root -= 1
             ui.setHintMsg(str(utils.GetNoteName(self.root)))
             event.handled = True
-
-        if event.midiId == 0x90 and event.data1 == self._play_key[self.page]:
+        if event.midiId == 0x90 and event.data1 == self._shiftUp12_key[self.page]:
             if event.pmeFlags & midi.PME_System !=0:
-                transport.start()
+                self.shift += 12
+                self.root += 12
+                ui.setHintMsg(str(utils.GetNoteName(self.root)))
                 event.handled = True
-        if event.midiId == 0x90 and event.data1 == self._stop_key[self.page]:
+        if event.midiId == 0x90 and event.data1 == self._shiftDown12_key[self.page]:
             if event.pmeFlags & midi.PME_System !=0:
-                transport.stop()
+                self.shift -= 12
+                self.root -= 12
+                ui.setHintMsg(str(utils.GetNoteName(self.root)))
                 event.handled = True
+        
         if event.midiId == 0x90 and event.data1 == self._record_key[self.page]:
             if event.pmeFlags & midi.PME_System !=0:
                 transport.record()
+                transport.start()
                 event.handled = True
 
-        if event.midiId == 0x90 and event.data1 + self.Move != self._play_key[self.page] or event.data1 + self.Move != self._stop_key[self.page] or event.data1 + self.Move != self._record_key[self.page]:
+        if event.midiId == 0x90 and event.data1 + self.Move != self._shiftUp12_key[self.page] or event.data1 + self.Move != self._shiftDown12_key[self.page] or event.data1 + self.Move != self._record_key[self.page]:
             print(utils.GetNoteName(event.data1), event.note)
         
 
