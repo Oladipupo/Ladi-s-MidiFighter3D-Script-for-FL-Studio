@@ -42,37 +42,50 @@ class MidiControllerConfig():
     def OnMidiOutMsg(self, event):
         #print(utils.GetNoteName(event.data1), event.note)
         #print(device.midiOutMsg(event.midiId, event.midiChan, event.data1, event.data2))
-        
-        
+        #print("scaleNum: ", self.scaleNum)
+#----------------------------------------------------------Scale LED's ----------------------------------------------------------------------#
         if self.scaleNum > 0:
             #MAJOR-----------------------
-            if self.scaleNum == 1:   
+            if self.scaleNum == 1: 
+                ui.setHintMsg("Major")
                 i = 36
-                while i < 99:
+                while i < 100:
                     keyRoot = i % 12
                     if keyRoot == 0 or keyRoot == 2 or keyRoot == 4 or keyRoot == 5 or keyRoot == 7 or keyRoot == 9 or keyRoot == 11:
-                        device.midiOutMsg(144, 2,  i, i)
-                        device.midiOutMsg(144, 2,  i, i)
+                        device.midiOutMsg(144, 2,  i, 68)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
                         event.handled = True
                     i += 1
               
             #MINOR-------------------------
-            if self.scaleNum == 2:   
+            if self.scaleNum == 2:
+                ui.setHintMsg("Natural Minor")   
                 i = 36
-                while i < 99:
+                while i < 100:
                     keyRoot = i % 12
                     if keyRoot == 0 or keyRoot == 2 or keyRoot == 3 or keyRoot == 5 or keyRoot == 7 or keyRoot == 8 or keyRoot == 10:
-                        device.midiOutMsg(144, 2,  i, i)
-                        device.midiOutMsg(144, 2,  i, i)
+                        device.midiOutMsg(144, 2,  i, 68)
                         event.handled = True
-                    i += 1   
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+        #Chromatic------------------------   
+        else:
+            ui.setHintMsg("Chromatic")
+            i = 36
+            while i < 100:
+                device.midiOutMsg(144, 2, i, 0)
+                i += 1
+#-------------------------------------------------------------------------------------------------------------------------------------------------------#            
         
     def OnMidiMsg(self, event):
         event.handled = False
         event.velocity = 100 #set all notes velocity to fl studios defualt, which is 100 or 78% of 127 rounded up.
 
-        #print(event.handled, event.midiId, event.midiChan, event.data1, event.data2)
-        print("midi ID:", event.midiId, "Midi Chan: ", event.midiChan, "Data1: ", event.data1,"Data2: ", event.data1, "Port: ", event.port, "Note: ",event.note, "controlNum: ", event.controlNum,"controlVal: ", event.controlVal,"Event: ", event.outEv)
+        #print("midi ID:", event.midiId, "Midi Chan: ", event.midiChan, "Data1: ", event.data1,"Data2: ", event.data1, "Port: ", event.port, "Note: ",event.note, "controlNum: ", event.controlNum,"controlVal: ", event.controlVal,"Event: ", event.outEv, "progNum: ", event.progNum, "midiChanEx: ", event.midiChanEx)
 
 
 #----------------------------------------------------------Controls Note shifting ----------------------------------------------------------------------#
@@ -172,9 +185,6 @@ class MidiControllerConfig():
 #---------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-
-        #if event.midiId == 0x90 and event.data1 + self.Move != self._shiftUp12_key[self.page] or event.data1 + self.Move != self._shiftDown12_key[self.page] or event.data1 + self.Move != self._record_key[self.page]:
-            #print(utils.GetNoteName(event.data1), event.note)
             
             
 
