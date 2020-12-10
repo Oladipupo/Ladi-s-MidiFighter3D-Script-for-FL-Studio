@@ -4,4 +4,4 @@
   -Semitone +/-\
   -Start/Stop Record&Play\
   -Scales [Chromatic, Major, Minor, MORE TO COME]\
-  -More accessible keys through the bank buttons [Known as "pages through the code"]
+  -More accessible keys through the bank buttons [Known as "pages" through the code]
