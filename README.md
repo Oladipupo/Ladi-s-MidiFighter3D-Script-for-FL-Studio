@@ -3,5 +3,6 @@
   -Octave +/-\
   -Semitone +/-\
   -Start/Stop Record&Play\
-  -Scales [Chromatic, Major, Minor, MORE TO COME]\
-  -More accessible keys through the bank buttons [Known as "pages" through the code]
+  -Scales [Chromatic, Major, Minor, Pentatonic Minor, Pentatonic Major, Blues, Dorian, Phrygian, Lidyian, Mixolydian, Locrian]\
+  -More accessible keys through the bank buttons [Known as "pages" through the code]\
+  -Mode for FL Studios 20.7 and above
