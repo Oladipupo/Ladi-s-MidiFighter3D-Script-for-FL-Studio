@@ -1,4 +1,4 @@
-#name= Ladi's Midi Fighter3D
+#name= Ladi's MidiFighter3D
 
 import midi
 import ui
@@ -25,6 +25,7 @@ class MidiControllerConfig():
         self.Cset = 12 #controls what octave or how many semitons away from C3 to be the first loew left note on page 1
         self.root = 36 + self.Cset #sets the rote note of the device
         self.scaleNum = 0 #[Chromatic *0*,Major*1*, minor*2*]
+        self.COLOR = 42 #color you want the notes in scale to be, look at Documents pdf to see the different colors it can be
         self.Move = self.Cset + self.shift #tells the program how manne semitones the note should be moved after calculations
         self._shiftUp12_key = [22 + self.Move,28 + self.Move,34 + self.Move,40 + self.Move] #represents notes shifting up an octave
         self._shiftDown12_key = [21 + self.Move,27 + self.Move,33 + self.Move,39 + self.Move] #represets notes that shift down an octave
@@ -34,10 +35,14 @@ class MidiControllerConfig():
         self._harm_key = [23 + self.Move,29 + self.Move,35 + self.Move,41 + self.Move] #changes the key you want 
     
     def OnInit(self):
-        print('init ready')
+        print("DO NOT RELOAD THE SCRIPT IF THE LIGHT IS NOT ON BANK ONE:")
+        print("-------it wouldnt work right, but if u click on and bank again then the buttons will work.")
 
     def OnDeInit(self):
-        print('deinit ready')
+        i = 36
+        while i < 100:
+            device.midiOutMsg(144, 2, i, 0)
+            i += 1
     
     def OnMidiOutMsg(self, event):
         #print(utils.GetNoteName(event.data1), event.note)
@@ -52,7 +57,7 @@ class MidiControllerConfig():
                 while i < 100:
                     keyRoot = i % 12
                     if keyRoot == 0 or keyRoot == 2 or keyRoot == 4 or keyRoot == 5 or keyRoot == 7 or keyRoot == 9 or keyRoot == 11:
-                        device.midiOutMsg(144, 2,  i, 68)
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
                         event.handled = True
                     else:  
                         device.midiOutMsg(144, 2,  i, 0)
@@ -61,20 +66,137 @@ class MidiControllerConfig():
               
             #MINOR-------------------------
             if self.scaleNum == 2:
-                ui.setHintMsg("Natural Minor")   
+                ui.setHintMsg("Natural Minor (Aeolian)")   
                 i = 36
                 while i < 100:
                     keyRoot = i % 12
                     if keyRoot == 0 or keyRoot == 2 or keyRoot == 3 or keyRoot == 5 or keyRoot == 7 or keyRoot == 8 or keyRoot == 10:
-                        device.midiOutMsg(144, 2,  i, 68)
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
                         event.handled = True
                     else:  
                         device.midiOutMsg(144, 2,  i, 0)
                         event.handled = True
                     i += 1
-        #Chromatic------------------------   
+            #Harmonic MINOR-------------------------
+            if self.scaleNum == 3:
+                ui.setHintMsg("Harmonic Minor")   
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 2 or keyRoot == 3 or keyRoot == 5 or keyRoot == 7 or keyRoot == 8 or keyRoot == 11:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #PENTATONIC MAJOR-----------------------
+            if self.scaleNum == 4: 
+                ui.setHintMsg("Pentatonic Major")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 2 or keyRoot == 4  or keyRoot == 7 or keyRoot == 9:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #PENTATONIC MINOR-------------------------
+            if self.scaleNum == 5:
+                ui.setHintMsg("Pentatonic Minor")   
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0  or keyRoot == 3 or keyRoot == 5 or keyRoot == 7  or keyRoot == 10:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #BLUES-----------------------
+            if self.scaleNum == 6: 
+                ui.setHintMsg("Blues")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 3 or keyRoot == 5 or keyRoot == 6 or keyRoot == 7 or keyRoot == 10:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #DORIAN-----------------------
+            if self.scaleNum == 7: 
+                ui.setHintMsg("Dorian")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 2 or keyRoot == 3 or keyRoot == 5 or keyRoot == 7 or keyRoot == 9 or keyRoot == 10:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #PHRYGIAN-----------------------
+            if self.scaleNum == 8: 
+                ui.setHintMsg("Phrygian")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 1 or keyRoot == 3 or keyRoot == 5 or keyRoot == 7 or keyRoot == 8 or keyRoot == 10:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #LYDIAN-----------------------
+            if self.scaleNum == 9: 
+                ui.setHintMsg("Lydian")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 2 or keyRoot == 4 or keyRoot == 6 or keyRoot == 7 or keyRoot == 9 or keyRoot == 11:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #MIXOLYDIAN-----------------------
+            if self.scaleNum == 10: 
+                ui.setHintMsg("Mixolydian")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 2 or keyRoot == 4 or keyRoot == 5 or keyRoot == 7 or keyRoot == 9 or keyRoot == 10:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+            #LOCRIAN-----------------------
+            if self.scaleNum == 11: 
+                ui.setHintMsg("Locrian")
+                i = 36
+                while i < 100:
+                    keyRoot = i % 12
+                    if keyRoot == 0 or keyRoot == 1 or keyRoot == 3 or keyRoot == 5 or keyRoot == 6 or keyRoot == 8 or keyRoot == 10:
+                        device.midiOutMsg(144, 2,  i, self.COLOR)
+                        event.handled = True
+                    else:  
+                        device.midiOutMsg(144, 2,  i, 0)
+                        event.handled = True
+                    i += 1
+        #Chromatic[OFF]------------------------   
         else:
-            ui.setHintMsg("Chromatic")
+            ui.setHintMsg("OFF")
             i = 36
             while i < 100:
                 device.midiOutMsg(144, 2, i, 0)
@@ -84,7 +206,6 @@ class MidiControllerConfig():
     def OnMidiMsg(self, event):
         event.handled = False
         event.velocity = 100 #set all notes velocity to fl studios defualt, which is 100 or 78% of 127 rounded up.
-
         #print("midi ID:", event.midiId, "Midi Chan: ", event.midiChan, "Data1: ", event.data1,"Data2: ", event.data1, "Port: ", event.port, "Note: ",event.note, "controlNum: ", event.controlNum,"controlVal: ", event.controlVal,"Event: ", event.outEv, "progNum: ", event.progNum, "midiChanEx: ", event.midiChanEx)
 
 
@@ -110,7 +231,7 @@ class MidiControllerConfig():
 #-------------------------------------------Scales Baby--------------------------------------------------------------------------------------------------#       
         if event.midiId == 0x90 and event.data1 == self._harm_key[self.page]:
             self.scaleNum += 1
-            self.scaleNum = self.scaleNum % 3
+            self.scaleNum = self.scaleNum % 12
             OnMidiOutMsg(event)
             event.handled = True
 #---------------------------------------------------------------------------------------------------------------------------------------------------------#
