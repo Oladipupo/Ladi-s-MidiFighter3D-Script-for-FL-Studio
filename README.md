@@ -6,4 +6,4 @@ A lot of hard work went into making this. Donations for my work would be much ap
   -Start/Stop Record&Play\
   -Scales [Chromatic, Major, Minor, Pentatonic Minor, Pentatonic Major, Blues, Dorian, Phrygian, Lidyian, Mixolydian, Locrian]\
   -More accessible keys through the bank buttons [Known as "pages" through the code]\
-  -Mode for FL Studios 20.7 and above
+  -Made for FL Studios 20.7 and above
