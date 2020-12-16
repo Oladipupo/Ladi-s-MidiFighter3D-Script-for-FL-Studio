@@ -39,10 +39,7 @@ class MidiControllerConfig():
         print("-------it wouldnt work right, but if u click on and bank again then the buttons will work.")
 
     def OnDeInit(self):
-        i = 36
-        while i < 100:
-            device.midiOutMsg(144, 2, i, 0)
-            i += 1
+        print("DeInit")
     
     def OnMidiOutMsg(self, event):
         #print(utils.GetNoteName(event.data1), event.note)
